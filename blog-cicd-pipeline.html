@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Google Tag Manager -->
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-5M2JVHL4');</script>
+        <!-- End Google Tag Manager -->
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Building a CI/CD Pipeline for a Static Site | Stefon La Touche</title>
+        <link rel="stylesheet" href="styles.css" />
+        <style>
+            .post-container {
+                max-width: 760px;
+                margin: 0 auto;
+                padding: 3rem 2rem 5rem;
+            }
+            .post-back {
+                display: inline-block;
+                color: #00d4aa;
+                text-decoration: none;
+                font-size: 0.9rem;
+                margin-bottom: 2rem;
+                opacity: 0.8;
+                transition: opacity 0.2s;
+            }
+            .post-back:hover { opacity: 1; }
+            .post-header { margin-bottom: 2.5rem; border-bottom: 1px solid #1a1a1a; padding-bottom: 2rem; }
+            .post-meta { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; }
+            .post-title { font-size: 2rem; font-weight: 700; line-height: 1.3; margin-bottom: 1rem; }
+            .post-subtitle { color: #888; font-size: 1.05rem; line-height: 1.6; }
+            .post-body { line-height: 1.8; color: #ccc; }
+            .post-body h2 { color: #fff; font-size: 1.3rem; margin: 2.5rem 0 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid #1a1a1a; }
+            .post-body h3 { color: #00d4aa; font-size: 1rem; margin: 1.5rem 0 0.5rem; }
+            .post-body p { margin-bottom: 1.2rem; }
+            .post-body ul { padding-left: 1.5rem; margin-bottom: 1.2rem; }
+            .post-body ul li { margin-bottom: 0.5rem; }
+            .post-body a { color: #00d4aa; text-decoration: none; }
+            .post-body a:hover { text-decoration: underline; }
+            .code-block {
+                background: #0a0a0a;
+                border: 1px solid #00d4aa22;
+                border-radius: 8px;
+                padding: 1.25rem 1.5rem;
+                font-family: 'Courier New', monospace;
+                font-size: 0.85rem;
+                color: #00d4aa;
+                overflow-x: auto;
+                white-space: pre;
+                margin: 1.2rem 0;
+                line-height: 1.6;
+            }
+            .code-block .comment { color: #555; }
+            .callout {
+                background: #00d4aa11;
+                border-left: 3px solid #00d4aa;
+                border-radius: 0 6px 6px 0;
+                padding: 1rem 1.25rem;
+                margin: 1.5rem 0;
+                color: #ccc;
+                font-size: 0.95rem;
+            }
+            .post-footer { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #1a1a1a; display: flex; justify-content: space-between; align-items: center; flex-wrap: gap; }
+            .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        </style>
+    </head>
+    <body>
+        <!-- Google Tag Manager (noscript) -->
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5M2JVHL4"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <!-- End Google Tag Manager (noscript) -->
+
+        <header>
+            <nav>
+                <a href="index.html" class="logo">Stefon La Touche</a>
+                <ul class="nav-links">
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="stack.html">Stack</a></li>
+                    <li><a href="blog.html" class="active">Blog</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="post-container">
+            <a href="blog.html" class="post-back">← Back to Blog</a>
+
+            <div class="post-header">
+                <div class="post-meta">
+                    <span class="category-tag cat-cloud">Cloud</span>
+                    <span class="category-tag cat-devops">DevOps</span>
+                    <span class="blog-date">Feb 2026</span>
+                </div>
+                <div class="post-title">Building a CI/CD Pipeline for a Static Site</div>
+                <p class="post-subtitle">
+                    How I wired GitHub Actions to automatically sync my portfolio to S3
+                    and invalidate CloudFront on every push to main — zero manual deploys.
+                </p>
+            </div>
+
+            <div class="post-body">
+
+                <h2>Why Automate a Static Site?</h2>
+                <p>
+                    When I first set up this portfolio on AWS S3 + CloudFront, I was manually running
+                    <code style="color:#00d4aa">aws s3 sync</code> from my terminal every time I made a change.
+                    It worked, but it was tedious — and more importantly, it wasn't the right way to do things.
+                    A real deployment pipeline means pushing code and walking away. The infrastructure does the rest.
+                </p>
+                <p>
+                    This post walks through exactly how I set up a GitHub Actions CI/CD pipeline that
+                    deploys this site automatically on every push to <code style="color:#00d4aa">main</code>.
+                </p>
+
+                <h2>The Stack</h2>
+                <ul>
+                    <li><strong style="color:#fff">GitHub Actions</strong> — runs the pipeline on push events</li>
+                    <li><strong style="color:#fff">AWS S3</strong> — stores and serves the static files</li>
+                    <li><strong style="color:#fff">AWS CloudFront</strong> — CDN that caches content at edge locations</li>
+                    <li><strong style="color:#fff">AWS IAM</strong> — scoped deploy user with least-privilege permissions</li>
+                    <li><strong style="color:#fff">GitHub Secrets</strong> — secure storage for AWS credentials</li>
+                </ul>
+
+                <h2>Step 1 — Create a Scoped IAM Deploy User</h2>
+                <p>
+                    The first thing I did was create a dedicated IAM user for deployments.
+                    Never use your root account or personal IAM user for CI/CD — if the credentials leak,
+                    the blast radius needs to be minimal.
+                </p>
+                <p>The deploy user has only two permissions:</p>
+                <div class="code-block">{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": ["s3:PutObject", "s3:DeleteObject", "s3:ListBucket"],
+      "Resource": [
+        "arn:aws:s3:::your-bucket-name",
+        "arn:aws:s3:::your-bucket-name/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": "cloudfront:CreateInvalidation",
+      "Resource": "arn:aws:cloudfront::YOUR_ACCOUNT_ID:distribution/YOUR_DIST_ID"
+    }
+  ]
+}</div>
+
+                <h2>Step 2 — Store Credentials in GitHub Secrets</h2>
+                <p>
+                    After creating the IAM user, I generated access keys and stored them in GitHub Secrets
+                    under <strong style="color:#fff">Settings → Secrets and variables → Actions</strong>:
+                </p>
+                <ul>
+                    <li><code style="color:#00d4aa">AWS_ACCESS_KEY_ID</code></li>
+                    <li><code style="color:#00d4aa">AWS_SECRET_ACCESS_KEY</code></li>
+                    <li><code style="color:#00d4aa">AWS_REGION</code></li>
+                    <li><code style="color:#00d4aa">S3_BUCKET</code></li>
+                    <li><code style="color:#00d4aa">CLOUDFRONT_DISTRIBUTION_ID</code></li>
+                </ul>
+                <div class="callout">
+                    Never hardcode AWS credentials in your workflow file. GitHub Secrets are encrypted at rest
+                    and are never exposed in logs. This is the right pattern for any CI/CD pipeline.
+                </div>
+
+                <h2>Step 3 — Write the GitHub Actions Workflow</h2>
+                <p>
+                    I created <code style="color:#00d4aa">.github/workflows/deploy.yml</code> at the root of the repo.
+                    It runs on every push to <code style="color:#00d4aa">main</code> and does three things:
+                    checks out the code, syncs it to S3, and invalidates the CloudFront cache.
+                </p>
+                <div class="code-block">name: Deploy to S3 + CloudFront
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Sync to S3
+        run: |
+          aws s3 sync . s3://${{ secrets.S3_BUCKET }} \
+            --delete \
+            --exclude ".git/*" \
+            --exclude ".github/*"
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/*"</div>
+
+                <h2>Why the --delete Flag Matters</h2>
+                <p>
+                    The <code style="color:#00d4aa">--delete</code> flag on <code style="color:#00d4aa">aws s3 sync</code>
+                    removes files from S3 that no longer exist in the repo. Without it, deleted or renamed
+                    files stay in the bucket forever — users might hit stale URLs returning old content,
+                    and your bucket accumulates junk over time.
+                </p>
+
+                <h2>Why You Must Invalidate CloudFront</h2>
+                <p>
+                    CloudFront caches files at edge locations around the world. Even after S3 is updated,
+                    users may still receive the old cached version for hours — or until the TTL expires.
+                    The <code style="color:#00d4aa">create-invalidation</code> call with path <code style="color:#00d4aa">/*</code>
+                    forces all edge locations to fetch fresh content from S3 immediately after every deploy.
+                </p>
+                <div class="callout">
+                    Every time I forgot to invalidate the cache during manual deploys, I wasted 10 minutes
+                    wondering why my changes weren't showing up. Automating this step eliminated that entirely.
+                </div>
+
+                <h2>The Full Flow</h2>
+                <div class="code-block"><span class="comment"># What happens on every git push to main:</span>
+
+git push origin main
+  → GitHub Actions triggered
+    → Checkout repo
+    → Configure AWS credentials (from Secrets)
+    → aws s3 sync --delete → files updated in S3
+    → cloudfront create-invalidation → cache cleared
+      → Live site updated within ~30 seconds</div>
+
+                <h2>Lessons Learned</h2>
+                <ul>
+                    <li><strong style="color:#fff">IAM least-privilege is non-negotiable</strong> — scope your deploy user to only what it needs</li>
+                    <li><strong style="color:#fff">Always invalidate after sync</strong> — CloudFront will silently serve stale content otherwise</li>
+                    <li><strong style="color:#fff">Exclude .git and .github from the S3 sync</strong> — you don't want those files in your bucket</li>
+                    <li><strong style="color:#fff">GitHub Actions is free for public repos</strong> — no infrastructure to maintain, native GitHub integration</li>
+                    <li><strong style="color:#fff">Test the pipeline by breaking it intentionally</strong> — introduce a typo, push, and verify it fails gracefully</li>
+                </ul>
+
+            </div>
+
+            <div class="post-footer">
+                <div class="post-tags">
+                    <span class="tech-tag">GitHub Actions</span>
+                    <span class="tech-tag">AWS S3</span>
+                    <span class="tech-tag">CloudFront</span>
+                    <span class="tech-tag">IAM</span>
+                    <span class="tech-tag">CI/CD</span>
+                    <span class="tech-tag">DevOps</span>
+                </div>
+                <a href="blog.html" class="btn-outline" style="white-space:nowrap">← All Posts</a>
+            </div>
+        </div>
+
+        <footer>
+            &copy; 2026 Stefon La Touche. All rights reserved.
+        </footer>
+
+        <script src="script.js"></script>
+    </body>
+</html>
