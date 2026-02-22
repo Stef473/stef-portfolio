@@ -108,6 +108,70 @@
                     </div>
                 </div>
 
+                <!-- ── Web Analytics (GTM + GA4) ── -->
+                <div class="stack-card">
+                    <div class="stack-card-header">
+                        <div class="stack-card-title">
+                            <span>📊</span> Web Analytics Implementation
+                        </div>
+                        <span class="status-badge status-complete">✅ Complete</span>
+                    </div>
+
+                    <div class="stack-section">
+                        <div class="stack-section-label">Tech Stack</div>
+                        <div class="stack-rows">
+                            <div class="stack-row">
+                                <span class="stack-row-label">Tag Manager</span>
+                                <span class="stack-row-value">Google Tag Manager (GTM-5M2JVHL4)</span>
+                            </div>
+                            <div class="stack-row">
+                                <span class="stack-row-label">Analytics</span>
+                                <span class="stack-row-value">Google Analytics 4 (GA4)</span>
+                            </div>
+                            <div class="stack-row">
+                                <span class="stack-row-label">Deployment</span>
+                                <span class="stack-row-value">GTM container script injected into all 4 HTML pages</span>
+                            </div>
+                            <div class="stack-row">
+                                <span class="stack-row-label">Trigger</span>
+                                <span class="stack-row-value">All Pages — fires GA4 tag on every page load</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stack-section">
+                        <div class="stack-section-label">Architecture</div>
+                        <div class="arch-block">Browser loads page → GTM container script fires → GTM checks rules → GA4 tag fires → Sends hit to Google Analytics
+
+  HTML Pages           GTM Container          GA4 Property
+  ──────────           ─────────────          ────────────
+  index.html    →→→    GTM-5M2JVHL4   →→→    G-XXXXXXXXXX
+  projects.html        ├─ GA4 Tag              └─ Realtime Reports
+  stack.html           ├─ All Pages trigger    └─ Audience Data
+  blog.html            └─ DataLayer            └─ Page View Events</div>
+                    </div>
+
+                    <div class="stack-section">
+                        <div class="stack-section-label">Key Decisions</div>
+                        <ul class="decision-list">
+                            <li>Used GTM instead of direct GA4 snippet — allows adding/changing tags without code deployments</li>
+                            <li>GTM container script placed at top of <code style="color:#00d4aa">&lt;head&gt;</code> for earliest possible load time</li>
+                            <li>Added <code style="color:#00d4aa">&lt;noscript&gt;</code> iframe fallback in <code style="color:#00d4aa">&lt;body&gt;</code> for browsers with JavaScript disabled</li>
+                            <li>Single GTM container covers all 4 pages — one publish deploys tracking changes everywhere</li>
+                        </ul>
+                    </div>
+
+                    <div class="stack-section">
+                        <div class="stack-section-label">Lessons Learned</div>
+                        <ul class="decision-list">
+                            <li>GTM decouples analytics from source code — marketers or analysts can add tags without a developer</li>
+                            <li>GA4 Realtime view is the fastest way to verify a tag is firing correctly after GTM publish</li>
+                            <li>GTM Preview mode lets you debug tag firing before pushing to production</li>
+                            <li>The DataLayer is a powerful pattern for passing custom event data to GTM without hardcoding</li>
+                        </ul>
+                    </div>
+                </div>
+
                 <!-- ── AWS Data Pipeline (placeholder) ── -->
                 <div class="coming-soon-wrap">
                     <div class="stack-card">
