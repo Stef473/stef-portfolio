@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Build Stack | Stefon La Touche</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <header>
+            <nav>
+                <a href="index.html" class="logo">Stefon La Touche</a>
+                <ul class="nav-links">
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="stack.html" class="active">Stack</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="page-hero">
+            <h1>Build Stack</h1>
+            <p>A high-level breakdown of the tools, architecture, and decisions behind each project.</p>
+        </div>
+
+        <section id="stack-list">
+            <div class="stack-cards">
+
+                <!-- ── Portfolio Site (full detail) ── -->
+                <div class="stack-card">
+                    <div class="stack-card-header">
+                        <div class="stack-card-title">
+                            <span>🌐</span> Portfolio Site
+                        </div>
+                        <span class="status-badge status-complete">✅ Complete</span>
+                    </div>
+
+                    <div class="stack-section">
+                        <div class="stack-section-label">Tech Stack</div>
+                        <div class="stack-rows">
+                            <div class="stack-row">
+                                <span class="stack-row-label">Frontend</span>
+                                <span class="stack-row-value">HTML5 · CSS3 · Vanilla JavaScript</span>
+                            </div>
+                            <div class="stack-row">
+                                <span class="stack-row-label">Hosting</span>
+                                <span class="stack-row-value">AWS S3 (static website hosting)</span>
+                            </div>
+                            <div class="stack-row">
+                                <span class="stack-row-label">CDN / HTTPS</span>
+                                <span class="stack-row-value">AWS CloudFront + ACM (SSL certificate)</span>
+                            </div>
+                            <div class="stack-row">
+                                <span class="stack-row-label">CI/CD</span>
+                                <span class="stack-row-value">GitHub Actions → S3 sync + CF cache invalidation</span>
+                            </div>
+                            <div class="stack-row">
+                                <span class="stack-row-label">Version Control</span>
+                                <span class="stack-row-value">Git + GitHub</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stack-section">
+                        <div class="stack-section-label">Architecture</div>
+                        <div class="arch-block">git push → GitHub Actions → aws s3 sync --delete → CloudFront invalidation (/*) → Live Site
+
+  Developer          CI/CD Pipeline          AWS Infrastructure
+  ─────────          ──────────────          ─────────────────
+  git push    →→→    GitHub Actions   →→→    S3 Bucket (origin)
+                     ├─ Checkout code         └─→ CloudFront CDN
+                     ├─ S3 sync               └─→ ACM HTTPS cert
+                     └─ CF invalidate  →→→    End User (browser)</div>
+                    </div>
+
+                    <div class="stack-section">
+                        <div class="stack-section-label">Key Decisions</div>
+                        <ul class="decision-list">
+                            <li>Chose S3 + CloudFront over managed hosting (Netlify, Vercel) to practice real AWS infrastructure skills</li>
+                            <li>CloudFront handles HTTPS for free via ACM — no need for a separate certificate manager</li>
+                            <li>GitHub Actions chosen over Jenkins for simplicity — no server to maintain, native GitHub integration</li>
+                            <li>Used <code style="color:#00d4aa">--delete</code> flag on S3 sync to keep bucket clean and remove stale files automatically</li>
+                            <li>Vanilla JS with no framework — keeps bundle size at zero and demonstrates core DOM skills</li>
+                        </ul>
+                    </div>
+
+                    <div class="stack-section">
+                        <div class="stack-section-label">Lessons Learned</div>
+                        <ul class="decision-list">
+                            <li>IAM least-privilege matters — created a dedicated deploy user with only S3 + CloudFront permissions</li>
+                            <li>CloudFront caches aggressively — always invalidate after deployment or users see stale content</li>
+                            <li>Cache-Control headers on S3 objects affect how long CloudFront holds content at edge nodes</li>
+                            <li>GitHub Secrets are the right way to store AWS credentials for CI/CD — never hardcode keys</li>
+                            <li>IntersectionObserver is a powerful, performant alternative to scroll event listeners</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- ── AWS Data Pipeline (placeholder) ── -->
+                <div class="coming-soon-wrap">
+                    <div class="stack-card">
+                        <div class="stack-card-header">
+                            <div class="stack-card-title">
+                                <span>🔁</span> AWS Data Pipeline
+                            </div>
+                            <span class="status-badge status-progress">🔄 In Progress</span>
+                        </div>
+
+                        <div class="stack-section">
+                            <div class="stack-section-label">Tech Stack</div>
+                            <div class="stack-rows">
+                                <div class="stack-row">
+                                    <span class="stack-row-label">Language</span>
+                                    <span class="stack-row-value">Python 3.x</span>
+                                </div>
+                                <div class="stack-row">
+                                    <span class="stack-row-label">Compute</span>
+                                    <span class="stack-row-value">AWS Lambda (serverless)</span>
+                                </div>
+                                <div class="stack-row">
+                                    <span class="stack-row-label">Storage</span>
+                                    <span class="stack-row-value">AWS S3</span>
+                                </div>
+                                <div class="stack-row">
+                                    <span class="stack-row-label">Monitoring</span>
+                                    <span class="stack-row-value">AWS CloudWatch</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stack-section">
+                            <div class="stack-section-label">Architecture</div>
+                            <div class="arch-block">Trigger → Lambda → Transform → S3 → CloudWatch Logs</div>
+                        </div>
+
+                        <div class="stack-section">
+                            <div class="stack-section-label">Key Decisions</div>
+                            <ul class="decision-list">
+                                <li>Documentation in progress...</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="coming-soon-overlay">
+                        <span>🔄</span>
+                        <span>In Progress</span>
+                    </div>
+                </div>
+
+                <!-- ── Security Home Lab (placeholder) ── -->
+                <div class="coming-soon-wrap">
+                    <div class="stack-card">
+                        <div class="stack-card-header">
+                            <div class="stack-card-title">
+                                <span>🔐</span> Security Home Lab
+                            </div>
+                            <span class="status-badge status-soon">🔮 Coming Soon</span>
+                        </div>
+
+                        <div class="stack-section">
+                            <div class="stack-section-label">Tech Stack</div>
+                            <div class="stack-rows">
+                                <div class="stack-row">
+                                    <span class="stack-row-label">OS</span>
+                                    <span class="stack-row-value">Linux (Ubuntu) · Kali Linux</span>
+                                </div>
+                                <div class="stack-row">
+                                    <span class="stack-row-label">Network</span>
+                                    <span class="stack-row-value">Wireshark · Nmap · tcpdump</span>
+                                </div>
+                                <div class="stack-row">
+                                    <span class="stack-row-label">SIEM</span>
+                                    <span class="stack-row-value">Splunk</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stack-section">
+                            <div class="stack-section-label">Architecture</div>
+                            <div class="arch-block">Coming soon — lab topology documentation pending setup</div>
+                        </div>
+
+                        <div class="stack-section">
+                            <div class="stack-section-label">Key Decisions</div>
+                            <ul class="decision-list">
+                                <li>Documentation coming soon...</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="coming-soon-overlay">
+                        <span>🔮</span>
+                        <span>Coming Soon</span>
+                    </div>
+                </div>
+
+                <!-- ── Python Analytics Dashboard (placeholder) ── -->
+                <div class="coming-soon-wrap">
+                    <div class="stack-card">
+                        <div class="stack-card-header">
+                            <div class="stack-card-title">
+                                <span>📊</span> Python Analytics Dashboard
+                            </div>
+                            <span class="status-badge status-soon">🔮 Coming Soon</span>
+                        </div>
+
+                        <div class="stack-section">
+                            <div class="stack-section-label">Tech Stack</div>
+                            <div class="stack-rows">
+                                <div class="stack-row">
+                                    <span class="stack-row-label">Language</span>
+                                    <span class="stack-row-value">Python 3.x</span>
+                                </div>
+                                <div class="stack-row">
+                                    <span class="stack-row-label">Data</span>
+                                    <span class="stack-row-value">Pandas · SQL</span>
+                                </div>
+                                <div class="stack-row">
+                                    <span class="stack-row-label">Visualization</span>
+                                    <span class="stack-row-value">Matplotlib · Jupyter</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stack-section">
+                            <div class="stack-section-label">Architecture</div>
+                            <div class="arch-block">Coming soon — project in planning phase</div>
+                        </div>
+
+                        <div class="stack-section">
+                            <div class="stack-section-label">Key Decisions</div>
+                            <ul class="decision-list">
+                                <li>Documentation coming soon...</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="coming-soon-overlay">
+                        <span>🔮</span>
+                        <span>Coming Soon</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <footer>
+            &copy; 2026 Stefon La Touche. All rights reserved.
+        </footer>
+
+        <script src="script.js"></script>
+    </body>
+</html>

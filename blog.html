@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Blog | Stefon La Touche</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <header>
+            <nav>
+                <a href="index.html" class="logo">Stefon La Touche</a>
+                <ul class="nav-links">
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="stack.html">Stack</a></li>
+                    <li><a href="blog.html" class="active">Blog</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="page-hero">
+            <h1>Notes &amp; Blog</h1>
+            <p>Writing about what I'm learning in cloud, security, data, and the journey from Scrum Master to Security Engineer.</p>
+        </div>
+
+        <section id="blog-list">
+            <div class="filter-bar">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="cloud">Cloud</button>
+                <button class="filter-btn" data-filter="security">Security</button>
+                <button class="filter-btn" data-filter="data">Data</button>
+                <button class="filter-btn" data-filter="career">Career</button>
+            </div>
+
+            <div class="blog-grid">
+
+                <div class="blog-card" data-category="cloud career">
+                    <div class="blog-meta">
+                        <span class="category-tag cat-cloud">Cloud</span>
+                        <span class="category-tag cat-career">Career</span>
+                        <span class="blog-date">Feb 2026</span>
+                    </div>
+                    <div class="blog-title">Getting AWS Cloud Practitioner Certified</div>
+                    <p class="blog-excerpt">
+                        My study strategy, the resources I used, key topics to focus on,
+                        and tips for passing the exam on the first try.
+                    </p>
+                    <span class="coming-soon-badge">Coming Soon</span>
+                </div>
+
+                <div class="blog-card" data-category="cloud devops">
+                    <div class="blog-meta">
+                        <span class="category-tag cat-cloud">Cloud</span>
+                        <span class="category-tag cat-devops">DevOps</span>
+                        <span class="blog-date">Feb 2026</span>
+                    </div>
+                    <div class="blog-title">Building a CI/CD Pipeline for a Static Site</div>
+                    <p class="blog-excerpt">
+                        How I wired GitHub Actions to automatically sync my portfolio to
+                        S3 and invalidate CloudFront on every push to main.
+                    </p>
+                    <span class="coming-soon-badge">Coming Soon</span>
+                </div>
+
+                <div class="blog-card" data-category="security">
+                    <div class="blog-meta">
+                        <span class="category-tag cat-security">Security</span>
+                        <span class="blog-date">2026</span>
+                    </div>
+                    <div class="blog-title">Intro to Network Security Monitoring</div>
+                    <p class="blog-excerpt">
+                        Setting up a basic home lab to practice packet analysis, port
+                        scanning, and log monitoring with open-source tools.
+                    </p>
+                    <span class="coming-soon-badge">Coming Soon</span>
+                </div>
+
+                <div class="blog-card" data-category="career">
+                    <div class="blog-meta">
+                        <span class="category-tag cat-career">Career</span>
+                        <span class="blog-date">2026</span>
+                    </div>
+                    <div class="blog-title">From Scrum Master to Engineer: My Journey</div>
+                    <p class="blog-excerpt">
+                        The path from agile project management to data analytics to
+                        security engineering — why I made the shift and what I've learned.
+                    </p>
+                    <span class="coming-soon-badge">Coming Soon</span>
+                </div>
+
+                <div class="blog-card" data-category="data">
+                    <div class="blog-meta">
+                        <span class="category-tag cat-data">Data</span>
+                        <span class="blog-date">2026</span>
+                    </div>
+                    <div class="blog-title">SQL Tips Every Data Analyst Should Know</div>
+                    <p class="blog-excerpt">
+                        Window functions, CTEs, and query optimization patterns I use
+                        regularly to turn raw data into actionable insights.
+                    </p>
+                    <span class="coming-soon-badge">Coming Soon</span>
+                </div>
+
+                <div class="blog-card" data-category="security cloud">
+                    <div class="blog-meta">
+                        <span class="category-tag cat-security">Security</span>
+                        <span class="category-tag cat-cloud">Cloud</span>
+                        <span class="blog-date">2026</span>
+                    </div>
+                    <div class="blog-title">IAM Least-Privilege: What I Learned the Hard Way</div>
+                    <p class="blog-excerpt">
+                        Why setting up a scoped IAM deploy user instead of using root
+                        credentials matters — and how to do it right.
+                    </p>
+                    <span class="coming-soon-badge">Coming Soon</span>
+                </div>
+
+            </div>
+        </section>
+
+        <footer>
+            &copy; 2026 Stefon La Touche. All rights reserved.
+        </footer>
+
+        <script src="script.js"></script>
+        <script>
+            // Filter functionality
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const cards = document.querySelectorAll('.blog-card');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    const filter = btn.dataset.filter;
+                    cards.forEach(card => {
+                        const categories = card.dataset.category || '';
+                        if (filter === 'all' || categories.includes(filter)) {
+                            card.style.display = '';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>
