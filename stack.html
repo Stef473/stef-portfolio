@@ -172,6 +172,75 @@
                     </div>
                 </div>
 
+                <!-- ── Agile Workflow + Jira ── -->
+                <div class="stack-card">
+                    <div class="stack-card-header">
+                        <div class="stack-card-title">
+                            <span>⚡</span> Agile Workflow with Jira
+                        </div>
+                        <span class="status-badge status-complete">✅ Complete</span>
+                    </div>
+
+                    <div class="stack-section">
+                        <div class="stack-section-label">Tech Stack</div>
+                        <div class="stack-rows">
+                            <div class="stack-row">
+                                <span class="stack-row-label">Project Board</span>
+                                <span class="stack-row-value">Jira (Atlassian Cloud — Free tier)</span>
+                            </div>
+                            <div class="stack-row">
+                                <span class="stack-row-label">API</span>
+                                <span class="stack-row-value">Jira REST API v3</span>
+                            </div>
+                            <div class="stack-row">
+                                <span class="stack-row-label">Auth</span>
+                                <span class="stack-row-value">Basic Auth (email + API token)</span>
+                            </div>
+                            <div class="stack-row">
+                                <span class="stack-row-label">Credentials</span>
+                                <span class="stack-row-value">Stored as env vars in ~/.zshrc</span>
+                            </div>
+                            <div class="stack-row">
+                                <span class="stack-row-label">Client</span>
+                                <span class="stack-row-value">curl + Python (JSON parsing)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stack-section">
+                        <div class="stack-section-label">Architecture</div>
+                        <div class="arch-block">~/.zshrc (env vars) → curl → Jira REST API → Board / Sprint / Tickets
+
+  Local Machine         Jira REST API           Jira Cloud
+  ────────────          ─────────────           ──────────
+  $JIRA_API_TOKEN →→→  POST /issue      →→→    Create Epic / Story
+  $JIRA_EMAIL          POST /transitions →→→    Set status → Done
+  $JIRA_BASE_URL       POST /sprint/{id} →→→    Add issues to sprint
+                       POST /sprint/start →→→   Activate sprint</div>
+                    </div>
+
+                    <div class="stack-section">
+                        <div class="stack-section-label">Key Decisions</div>
+                        <ul class="decision-list">
+                            <li>Used Jira REST API over the UI to create tickets in bulk — faster and repeatable</li>
+                            <li>Stored API token in <code style="color:#00d4aa">~/.zshrc</code> as env var — never hardcoded in scripts or committed to git</li>
+                            <li>Added <code style="color:#00d4aa">.gitignore</code> to block <code style="color:#00d4aa">.env</code> and <code style="color:#00d4aa">.zshrc</code> from being committed to the repo</li>
+                            <li>Used Jira Free tier — supports unlimited projects and sprints for solo developers</li>
+                            <li>Chose Scrum board over Kanban to practice sprint-based agile workflow</li>
+                        </ul>
+                    </div>
+
+                    <div class="stack-section">
+                        <div class="stack-section-label">Lessons Learned</div>
+                        <ul class="decision-list">
+                            <li>Jira's transition IDs are workflow-specific — always query <code style="color:#00d4aa">/transitions</code> before automating status changes</li>
+                            <li>Epics must be created before stories — stories reference the epic key as a parent</li>
+                            <li>API tokens expire or get revoked — <code style="color:#00d4aa">source ~/.zshrc</code> is needed after any token update</li>
+                            <li>Storing credentials in chat is a security risk — always use env vars or a secrets manager</li>
+                        </ul>
+                    </div>
+                </div>
+
                 <!-- ── AWS Data Pipeline (placeholder) ── -->
                 <div class="coming-soon-wrap">
                     <div class="stack-card">
