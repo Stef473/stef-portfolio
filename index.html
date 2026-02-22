@@ -12,7 +12,7 @@
                 <span class="logo">Stefon La Touche</span>
                 <ul class="nav-links">
                     <li><a href="#about">About</a></li>
-                     <li><a href="#skills">Skills</a></li>
+                    <li><a href="#skills">Skills</a></li>
                     <li><a href="#projects">Projects</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
@@ -20,28 +20,98 @@
         </header>
 
         <section id="hero">
-            <h1>Hi, I'm <span class="highlight">Stefon La Touche</span></h1>
-            <p>Scrum Master | Data Analyst | Future Security Engineer</p>
-            <a href="#projects" class="btn">See My work</a>
+            <canvas id="matrix-canvas"></canvas>
+            <div class="hero-content">
+                <h1>Hi, I'm <span class="highlight">Stefon La Touche</span></h1>
+                <p>Scrum Master | Data Analyst | Future Security Engineer</p>
+                <a href="#projects" class="btn">See My Work</a>
+            </div>
+        </section>
+
+        <section id="about">
+            <h2>About</h2>
+            <div class="terminal">
+                <div class="terminal-header">
+                    <span class="dot dot-red"></span>
+                    <span class="dot dot-yellow"></span>
+                    <span class="dot dot-green"></span>
+                    <span class="terminal-title">stefon@portfolio:~</span>
+                </div>
+                <div class="terminal-body" id="terminal-body"></div>
+            </div>
         </section>
 
         <section id="skills">
             <h2>Skills</h2>
             <div class="skills-grid">
-                <div class="skill-card"> Python</div>
-                <div class="skill-card"> AWS</div>
-                <div class="skill-card"> GitHub</div>
-                <div class="skill-card"> SQL</div>
-                <div class="skill-card"> Cyber Security</div>
-                <div class="skill-card"> Agile Scrum Master</div>
+                <div class="skill-card">
+                    <div class="skill-header">
+                        <span class="skill-icon">🐍</span>
+                        <span class="skill-name">Python</span>
+                    </div>
+                    <div class="skill-bar-wrap">
+                        <div class="skill-bar" data-level="75"></div>
+                    </div>
+                    <span class="skill-percent">75%</span>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-header">
+                        <span class="skill-icon">☁️</span>
+                        <span class="skill-name">AWS</span>
+                    </div>
+                    <div class="skill-bar-wrap">
+                        <div class="skill-bar" data-level="70"></div>
+                    </div>
+                    <span class="skill-percent">70%</span>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-header">
+                        <span class="skill-icon">🐙</span>
+                        <span class="skill-name">GitHub</span>
+                    </div>
+                    <div class="skill-bar-wrap">
+                        <div class="skill-bar" data-level="85"></div>
+                    </div>
+                    <span class="skill-percent">85%</span>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-header">
+                        <span class="skill-icon">🗄️</span>
+                        <span class="skill-name">SQL</span>
+                    </div>
+                    <div class="skill-bar-wrap">
+                        <div class="skill-bar" data-level="70"></div>
+                    </div>
+                    <span class="skill-percent">70%</span>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-header">
+                        <span class="skill-icon">🔐</span>
+                        <span class="skill-name">Cyber Security</span>
+                    </div>
+                    <div class="skill-bar-wrap">
+                        <div class="skill-bar" data-level="65"></div>
+                    </div>
+                    <span class="skill-percent">65%</span>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-header">
+                        <span class="skill-icon">⚡</span>
+                        <span class="skill-name">Agile Scrum</span>
+                    </div>
+                    <div class="skill-bar-wrap">
+                        <div class="skill-bar" data-level="90"></div>
+                    </div>
+                    <span class="skill-percent">90%</span>
+                </div>
             </div>
         </section>
 
         <section id="projects">
             <h2>Projects</h2>
-            <div class="projects-card">
-                <h3> This Portfolio Site</h3>
-                <p> Built with HTMl/CSS/JS, deployed to AWS S3 + CloudFront, version controlled with GitHub.</p>
+            <div class="project-card">
+                <h3>This Portfolio Site</h3>
+                <p>Built with HTML/CSS/JS, deployed to AWS S3 + CloudFront, version controlled with GitHub.</p>
                 <a href="https://github.com/Stef473/stef-portfolio" target="_blank" class="btn">View on GitHub</a>
             </div>
         </section>
@@ -49,12 +119,14 @@
         <section id="contact">
             <h2>Get In Touch With Me</h2>
             <p>Email: stefonlatouche@gmail.com</p>
-            <p> Linkedin: linkedIn.com/in/stefonlatouche/</p>
-            <p> GitHub: github.com/stefonlatouche</p>
+            <p>LinkedIn: <a href="https://linkedin.com/in/stefonlatouche" target="_blank">linkedin.com/in/stefonlatouche</a></p>
+            <p>GitHub: <a href="https://github.com/stefonlatouche" target="_blank">github.com/stefonlatouche</a></p>
         </section>
 
         <footer>
-            &copy; 2024 Stefon La Touche. All rights reserved.
+            &copy; 2026 Stefon La Touche. All rights reserved.
         </footer>
+
+        <script src="script.js"></script>
     </body>
 </html>
