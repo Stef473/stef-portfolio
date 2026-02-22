@@ -11,8 +11,30 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Building a CI/CD Pipeline for a Static Site | Stefon La Touche</title>
-        <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-        <link rel="stylesheet" href="styles.css" />
+
+        <!-- SEO: Primary Meta Tags -->
+        <meta name="description" content="How I wired GitHub Actions to automatically sync my portfolio to AWS S3 and invalidate CloudFront on every push to main. A step-by-step CI/CD pipeline guide for static sites." />
+        <meta name="keywords" content="GitHub Actions CI/CD, AWS S3 deploy, CloudFront invalidation, static site pipeline, GitHub Actions tutorial, S3 sync deploy" />
+        <meta name="author" content="Stefon La Touche" />
+        <link rel="canonical" href="https://www.stefonlatouche.com/blog/cicd-pipeline.html" />
+
+        <!-- SEO: Open Graph -->
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content="Building a CI/CD Pipeline for a Static Site" />
+        <meta property="og:description" content="How I wired GitHub Actions to sync my portfolio to S3 and invalidate CloudFront on every push to main." />
+        <meta property="og:url" content="https://www.stefonlatouche.com/blog/cicd-pipeline.html" />
+        <meta property="og:site_name" content="Stefon La Touche" />
+        <meta property="article:published_time" content="2026-02-21" />
+        <meta property="article:author" content="Stefon La Touche" />
+
+        <!-- SEO: Twitter Card -->
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="Building a CI/CD Pipeline for a Static Site" />
+        <meta name="twitter:description" content="GitHub Actions to S3 sync + CloudFront invalidation — automated deploys for static sites." />
+        <meta name="twitter:creator" content="@stefonlatouche" />
+
+        <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+        <link rel="stylesheet" href="../styles.css" />
         <style>
             .post-container {
                 max-width: 760px;
@@ -76,18 +98,18 @@
 
         <header>
             <nav>
-                <a href="index.html" class="logo">Stefon La Touche</a>
+                <a href="../index.html" class="logo">Stefon La Touche</a>
                 <ul class="nav-links">
-                    <li><a href="projects.html">Projects</a></li>
-                    <li><a href="stack.html">Stack</a></li>
-                    <li><a href="blog.html" class="active">Blog</a></li>
-                    <li><a href="index.html#contact">Contact</a></li>
+                    <li><a href="../projects.html">Projects</a></li>
+                    <li><a href="../stack.html">Stack</a></li>
+                    <li><a href="../blog.html" class="active">Blog</a></li>
+                    <li><a href="../index.html#contact">Contact</a></li>
                 </ul>
             </nav>
         </header>
 
         <div class="post-container">
-            <a href="blog.html" class="post-back">← Back to Blog</a>
+            <a href="../blog.html" class="post-back">← Back to Blog</a>
 
             <div class="post-header">
                 <div class="post-meta">
@@ -260,7 +282,7 @@ git push origin main
                     <span class="tech-tag">CI/CD</span>
                     <span class="tech-tag">DevOps</span>
                 </div>
-                <a href="blog.html" class="btn-outline" style="white-space:nowrap">← All Posts</a>
+                <a href="../blog.html" class="btn-outline" style="white-space:nowrap">← All Posts</a>
             </div>
         </div>
 
@@ -268,6 +290,6 @@ git push origin main
             &copy; 2026 Stefon La Touche. All rights reserved.
         </footer>
 
-        <script src="script.js"></script>
+        <script src="../script.js"></script>
     </body>
 </html>
