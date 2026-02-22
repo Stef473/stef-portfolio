@@ -61,14 +61,17 @@
             <div class="stack-cards">
 
                 <!-- ── Portfolio Site (full detail) ── -->
-                <div class="stack-card">
+                <div class="stack-card collapsible-card">
                     <div class="stack-card-header">
                         <div class="stack-card-title">
                             <span>🌐</span> Portfolio Site
                         </div>
-                        <span class="status-badge status-complete">✅ Complete</span>
+                        <div class="stack-card-header-actions">
+                            <span class="status-badge status-complete">✅ Complete</span>
+                            <span class="stack-chevron">▾</span>
+                        </div>
                     </div>
-
+                    <div class="stack-card-body">
                     <div class="stack-section">
                         <div class="stack-section-label">Tech Stack</div>
                         <div class="stack-rows">
@@ -128,17 +131,21 @@
                             <li>IntersectionObserver is a powerful, performant alternative to scroll event listeners</li>
                         </ul>
                     </div>
+                    </div><!-- /.stack-card-body -->
                 </div>
 
                 <!-- ── Web Analytics (GTM + GA4) ── -->
-                <div class="stack-card">
+                <div class="stack-card collapsible-card">
                     <div class="stack-card-header">
                         <div class="stack-card-title">
                             <span>📊</span> Web Analytics Implementation
                         </div>
-                        <span class="status-badge status-complete">✅ Complete</span>
+                        <div class="stack-card-header-actions">
+                            <span class="status-badge status-complete">✅ Complete</span>
+                            <span class="stack-chevron">▾</span>
+                        </div>
                     </div>
-
+                    <div class="stack-card-body">
                     <div class="stack-section">
                         <div class="stack-section-label">Tech Stack</div>
                         <div class="stack-rows">
@@ -192,17 +199,21 @@
                             <li>The DataLayer is a powerful pattern for passing custom event data to GTM without hardcoding</li>
                         </ul>
                     </div>
+                    </div><!-- /.stack-card-body -->
                 </div>
 
                 <!-- ── Agile Workflow + Jira ── -->
-                <div class="stack-card">
+                <div class="stack-card collapsible-card">
                     <div class="stack-card-header">
                         <div class="stack-card-title">
                             <span>⚡</span> Agile Workflow with Jira
                         </div>
-                        <span class="status-badge status-complete">✅ Complete</span>
+                        <div class="stack-card-header-actions">
+                            <span class="status-badge status-complete">✅ Complete</span>
+                            <span class="stack-chevron">▾</span>
+                        </div>
                     </div>
-
+                    <div class="stack-card-body">
                     <div class="stack-section">
                         <div class="stack-section-label">Tech Stack</div>
                         <div class="stack-rows">
@@ -261,6 +272,7 @@
                             <li>Storing credentials in chat is a security risk — always use env vars or a secrets manager</li>
                         </ul>
                     </div>
+                    </div><!-- /.stack-card-body -->
                 </div>
 
                 <!-- ── AWS Data Pipeline (placeholder) ── -->
@@ -413,5 +425,21 @@
         </footer>
 
         <script src="script.js"></script>
+        <script>
+            document.querySelectorAll('.collapsible-card').forEach(card => {
+                const header = card.querySelector('.stack-card-header');
+                const body   = card.querySelector('.stack-card-body');
+                header.style.cursor = 'pointer';
+                body.style.maxHeight = body.scrollHeight + 'px';
+
+                header.addEventListener('click', () => {
+                    if (card.classList.toggle('collapsed')) {
+                        body.style.maxHeight = '0';
+                    } else {
+                        body.style.maxHeight = body.scrollHeight + 'px';
+                    }
+                });
+            });
+        </script>
     </body>
 </html>
