@@ -236,22 +236,25 @@
             const filterBtns = document.querySelectorAll('.filter-btn');
             const cards = document.querySelectorAll('.project-card-full');
 
-            filterBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    filterBtns.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
+            function applyFilter(filter) {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                const activeBtn = document.querySelector(`.filter-btn[data-filter="${filter}"]`);
+                if (activeBtn) activeBtn.classList.add('active');
 
-                    const filter = btn.dataset.filter;
-                    cards.forEach(card => {
-                        const categories = card.dataset.category || '';
-                        if (filter === 'all' || categories.includes(filter)) {
-                            card.style.display = '';
-                        } else {
-                            card.style.display = 'none';
-                        }
-                    });
+                cards.forEach(card => {
+                    const categories = card.dataset.category || '';
+                    card.style.display = (filter === 'all' || categories.includes(filter)) ? '' : 'none';
                 });
+            }
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => applyFilter(btn.dataset.filter));
             });
+
+            // Apply filter from URL query param (e.g. ?filter=cloud)
+            const params = new URLSearchParams(window.location.search);
+            const preFilter = params.get('filter');
+            if (preFilter) applyFilter(preFilter);
         </script>
     </body>
 </html>
