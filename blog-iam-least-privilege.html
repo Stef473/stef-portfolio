@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Google Tag Manager -->
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-5M2JVHL4');</script>
+        <!-- End Google Tag Manager -->
+
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <!-- SEO: Primary Meta Tags -->
+        <title>IAM Least-Privilege: What I Learned the Hard Way | Stefon La Touche</title>
+        <meta name="description" content="A practical guide to AWS IAM least-privilege access. Learn how to create a scoped IAM deploy user for S3 and CloudFront CI/CD pipelines — and why using root credentials is a serious mistake." />
+        <meta name="keywords" content="AWS IAM least privilege, IAM deploy user, AWS S3 CloudFront permissions, IAM policy example, AWS CI/CD security, least privilege access control" />
+        <meta name="author" content="Stefon La Touche" />
+        <link rel="canonical" href="https://www.stefonlatouche.com/blog-iam-least-privilege.html" />
+
+        <!-- SEO: Open Graph (LinkedIn, Facebook) -->
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content="IAM Least-Privilege: What I Learned the Hard Way" />
+        <meta property="og:description" content="A practical guide to AWS IAM least-privilege access for CI/CD pipelines. Scoped deploy users, minimal permissions, and why it matters." />
+        <meta property="og:url" content="https://www.stefonlatouche.com/blog-iam-least-privilege.html" />
+        <meta property="og:site_name" content="Stefon La Touche" />
+        <meta property="article:published_time" content="2026-02-21" />
+        <meta property="article:author" content="Stefon La Touche" />
+        <meta property="article:tag" content="AWS" />
+        <meta property="article:tag" content="IAM" />
+        <meta property="article:tag" content="Security" />
+        <meta property="article:tag" content="DevOps" />
+
+        <!-- SEO: Twitter Card -->
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="IAM Least-Privilege: What I Learned the Hard Way" />
+        <meta name="twitter:description" content="A practical guide to AWS IAM least-privilege access for CI/CD pipelines." />
+        <meta name="twitter:creator" content="@stefonlatouche" />
+
+        <!-- SEO: Structured Data (Article) -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": "IAM Least-Privilege: What I Learned the Hard Way",
+            "description": "A practical guide to AWS IAM least-privilege access. Learn how to create a scoped IAM deploy user for S3 and CloudFront CI/CD pipelines.",
+            "author": {
+                "@type": "Person",
+                "name": "Stefon La Touche",
+                "url": "https://www.stefonlatouche.com"
+            },
+            "datePublished": "2026-02-21",
+            "publisher": {
+                "@type": "Person",
+                "name": "Stefon La Touche"
+            },
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://www.stefonlatouche.com/blog-iam-least-privilege.html"
+            },
+            "keywords": ["AWS IAM", "least privilege", "cloud security", "CI/CD", "DevOps"]
+        }
+        </script>
+
+        <link rel="stylesheet" href="styles.css" />
+        <style>
+            .post-container {
+                max-width: 760px;
+                margin: 0 auto;
+                padding: 3rem 2rem 5rem;
+            }
+            .post-back {
+                display: inline-block;
+                color: #00d4aa;
+                text-decoration: none;
+                font-size: 0.9rem;
+                margin-bottom: 2rem;
+                opacity: 0.8;
+                transition: opacity 0.2s;
+            }
+            .post-back:hover { opacity: 1; }
+            .post-header { margin-bottom: 2.5rem; border-bottom: 1px solid #1a1a1a; padding-bottom: 2rem; }
+            .post-meta { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; }
+            .post-title { font-size: 2rem; font-weight: 700; line-height: 1.3; margin-bottom: 1rem; }
+            .post-subtitle { color: #888; font-size: 1.05rem; line-height: 1.6; }
+            .post-body { line-height: 1.8; color: #ccc; }
+            .post-body h2 { color: #fff; font-size: 1.3rem; margin: 2.5rem 0 1rem; padding-bottom: 0.4rem; border-bottom: 1px solid #1a1a1a; }
+            .post-body h3 { color: #00d4aa; font-size: 1rem; margin: 1.5rem 0 0.5rem; }
+            .post-body p { margin-bottom: 1.2rem; }
+            .post-body ul, .post-body ol { padding-left: 1.5rem; margin-bottom: 1.2rem; }
+            .post-body ul li, .post-body ol li { margin-bottom: 0.5rem; }
+            .post-body a { color: #00d4aa; text-decoration: none; }
+            .post-body a:hover { text-decoration: underline; }
+            .code-block {
+                background: #0a0a0a;
+                border: 1px solid #00d4aa22;
+                border-radius: 8px;
+                padding: 1.25rem 1.5rem;
+                font-family: 'Courier New', monospace;
+                font-size: 0.85rem;
+                color: #00d4aa;
+                overflow-x: auto;
+                white-space: pre;
+                margin: 1.2rem 0;
+                line-height: 1.6;
+            }
+            .code-block .comment { color: #555; }
+            .code-block .bad { color: #ff7b72; }
+            .code-block .good { color: #28ca41; }
+            .callout {
+                background: #00d4aa11;
+                border-left: 3px solid #00d4aa;
+                border-radius: 0 6px 6px 0;
+                padding: 1rem 1.25rem;
+                margin: 1.5rem 0;
+                color: #ccc;
+                font-size: 0.95rem;
+            }
+            .callout.warning {
+                background: #ff7b7211;
+                border-left-color: #ff7b72;
+            }
+            .permission-table { width: 100%; border-collapse: collapse; margin: 1.2rem 0; font-size: 0.9rem; }
+            .permission-table th { background: #0a0a0a; color: #00d4aa; padding: 0.6rem 1rem; text-align: left; border: 1px solid #1a1a1a; }
+            .permission-table td { padding: 0.6rem 1rem; border: 1px solid #1a1a1a; color: #ccc; }
+            .permission-table tr:hover td { background: #111; }
+            .post-footer { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #1a1a1a; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+            .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        </style>
+    </head>
+    <body>
+        <!-- Google Tag Manager (noscript) -->
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5M2JVHL4"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <!-- End Google Tag Manager (noscript) -->
+
+        <header>
+            <nav>
+                <a href="index.html" class="logo">Stefon La Touche</a>
+                <ul class="nav-links">
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="stack.html">Stack</a></li>
+                    <li><a href="blog.html" class="active">Blog</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="post-container">
+            <a href="blog.html" class="post-back">← Back to Blog</a>
+
+            <div class="post-header">
+                <div class="post-meta">
+                    <span class="category-tag cat-security">Security</span>
+                    <span class="category-tag cat-cloud">Cloud</span>
+                    <span class="blog-date">Feb 2026</span>
+                </div>
+                <h1 class="post-title">IAM Least-Privilege: What I Learned the Hard Way</h1>
+                <p class="post-subtitle">
+                    Why setting up a scoped AWS IAM deploy user instead of using root credentials matters —
+                    and a step-by-step guide to doing it right for S3 + CloudFront CI/CD pipelines.
+                </p>
+            </div>
+
+            <div class="post-body">
+
+                <h2>What Is IAM Least-Privilege?</h2>
+                <p>
+                    The principle of least privilege means giving any user, service, or system
+                    only the minimum permissions required to do its job — nothing more. In AWS,
+                    this is enforced through <strong style="color:#fff">IAM (Identity and Access Management)</strong>
+                    policies that explicitly allow or deny specific actions on specific resources.
+                </p>
+                <p>
+                    It sounds simple. In practice, most people skip it — especially when getting started.
+                    I was one of them.
+                </p>
+
+                <h2>The Mistake I Almost Made</h2>
+                <p>
+                    When I first set up my CI/CD pipeline to deploy this portfolio to AWS S3 + CloudFront,
+                    the path of least resistance was to use my personal IAM user's access keys — the one
+                    with <code style="color:#00d4aa">AdministratorAccess</code>. It would have worked instantly.
+                </p>
+                <div class="callout warning">
+                    Using admin credentials in a CI/CD pipeline means that if those credentials are ever
+                    exposed — in a log, a public repo, or a breach — an attacker has full control of your
+                    entire AWS account. Every service. Every region. Every resource.
+                </div>
+                <p>
+                    I caught myself before doing it. Here's what I did instead.
+                </p>
+
+                <h2>Step 1 — Create a Dedicated Deploy User</h2>
+                <p>
+                    The first step is creating a separate IAM user whose only purpose is to run deployments.
+                    This user should have no AWS Console access — only programmatic access (access key + secret key).
+                </p>
+                <ol>
+                    <li>Go to <strong style="color:#fff">IAM → Users → Create user</strong></li>
+                    <li>Name it something descriptive: <code style="color:#00d4aa">portfolio-deploy</code></li>
+                    <li>Select <strong style="color:#fff">Programmatic access only</strong> — no Console login</li>
+                    <li>Skip adding any policies for now — we'll do that next</li>
+                    <li>Generate and save the access key ID and secret key</li>
+                </ol>
+
+                <h2>Step 2 — Write a Scoped IAM Policy</h2>
+                <p>
+                    Instead of attaching a managed policy like <code style="color:#00d4aa">AmazonS3FullAccess</code>,
+                    write a custom policy that grants only what the deploy pipeline actually needs:
+                </p>
+                <ul>
+                    <li>Read and write objects in one specific S3 bucket</li>
+                    <li>Create CloudFront cache invalidations for one specific distribution</li>
+                </ul>
+
+                <div class="code-block">{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      <span class="comment">// Allow syncing files to the S3 bucket</span>
+      "Sid": "S3DeployAccess",
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:GetObject",
+        "s3:DeleteObject",
+        "s3:ListBucket"
+      ],
+      "Resource": [
+        "arn:aws:s3:::your-bucket-name",
+        "arn:aws:s3:::your-bucket-name/*"
+      ]
+    },
+    {
+      <span class="comment">// Allow CloudFront cache invalidation only</span>
+      "Sid": "CloudFrontInvalidation",
+      "Effect": "Allow",
+      "Action": "cloudfront:CreateInvalidation",
+      "Resource": "arn:aws:cloudfront::YOUR_ACCOUNT_ID:distribution/YOUR_DIST_ID"
+    }
+  ]
+}</div>
+
+                <p>
+                    Attach this policy directly to the <code style="color:#00d4aa">portfolio-deploy</code> user.
+                    That's it. Nothing else.
+                </p>
+
+                <h2>What This Policy Allows vs. What It Blocks</h2>
+
+                <table class="permission-table">
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Allowed?</th>
+                            <th>Why</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Upload files to S3 bucket</td><td style="color:#28ca41">✅ Yes</td><td>Needed for deployment</td></tr>
+                        <tr><td>Delete stale files from S3</td><td style="color:#28ca41">✅ Yes</td><td>Needed for <code style="color:#00d4aa">--delete</code> flag</td></tr>
+                        <tr><td>Invalidate CloudFront cache</td><td style="color:#28ca41">✅ Yes</td><td>Needed post-deploy</td></tr>
+                        <tr><td>Access other S3 buckets</td><td style="color:#ff7b72">❌ No</td><td>Not in Resource ARN</td></tr>
+                        <tr><td>Delete the S3 bucket itself</td><td style="color:#ff7b72">❌ No</td><td>Not in Action list</td></tr>
+                        <tr><td>Access EC2, RDS, Lambda, etc.</td><td style="color:#ff7b72">❌ No</td><td>Not in policy at all</td></tr>
+                        <tr><td>Create or delete IAM users</td><td style="color:#ff7b72">❌ No</td><td>Not in policy at all</td></tr>
+                        <tr><td>Access AWS Console</td><td style="color:#ff7b72">❌ No</td><td>Programmatic access only</td></tr>
+                    </tbody>
+                </table>
+
+                <h2>Step 3 — Store Credentials in GitHub Secrets</h2>
+                <p>
+                    Never put AWS credentials in your code, workflow files, or environment variables
+                    that get committed. GitHub Secrets are the right place — they're encrypted at rest
+                    and are masked in all logs.
+                </p>
+                <p>
+                    Go to your repo → <strong style="color:#fff">Settings → Secrets and variables → Actions → New repository secret</strong>:
+                </p>
+                <div class="code-block">AWS_ACCESS_KEY_ID      → access key for portfolio-deploy user
+AWS_SECRET_ACCESS_KEY  → secret key for portfolio-deploy user
+AWS_REGION             → e.g. us-east-1
+S3_BUCKET              → your-bucket-name
+CLOUDFRONT_DISTRIBUTION_ID → your distribution ID</div>
+
+                <h2>Step 4 — Reference Secrets in Your Workflow</h2>
+                <p>
+                    Your GitHub Actions workflow never sees the actual values — it references them by name:
+                </p>
+                <div class="code-block">- name: Configure AWS credentials
+  uses: aws-actions/configure-aws-credentials@v2
+  with:
+    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    aws-region: ${{ secrets.AWS_REGION }}</div>
+
+                <div class="callout">
+                    Even if someone forks your repo or your workflow logs are exposed, the secret values
+                    never appear. GitHub replaces them with <code style="color:#00d4aa">***</code> in all output.
+                </div>
+
+                <h2>What Happens If the Credentials Leak?</h2>
+                <p>
+                    This is the key question — and the whole point of least-privilege.
+                </p>
+
+                <h3>With admin credentials leaked:</h3>
+                <p>
+                    An attacker can spin up EC2 instances for crypto mining, exfiltrate data from every
+                    S3 bucket, delete your entire infrastructure, create new IAM users with full access,
+                    and rack up a bill worth thousands of dollars — all before you notice.
+                </p>
+
+                <h3>With least-privilege deploy credentials leaked:</h3>
+                <p>
+                    An attacker can upload files to one specific S3 bucket and invalidate one CloudFront
+                    distribution. That's it. You rotate the key, the damage is contained, and you move on.
+                </p>
+
+                <div class="callout warning">
+                    Blast radius is everything in security. Least-privilege doesn't prevent breaches — it
+                    limits what an attacker can do when one happens.
+                </div>
+
+                <h2>How to Rotate a Compromised Key</h2>
+                <p>
+                    If you ever suspect your credentials are exposed:
+                </p>
+                <ol>
+                    <li>Go to <strong style="color:#fff">IAM → Users → portfolio-deploy → Security credentials</strong></li>
+                    <li>Click <strong style="color:#fff">Deactivate</strong> on the compromised key immediately</li>
+                    <li>Create a new access key</li>
+                    <li>Update the new values in GitHub Secrets</li>
+                    <li>Delete the old deactivated key</li>
+                    <li>Review CloudTrail logs to audit what the compromised key was used for</li>
+                </ol>
+
+                <h2>Lessons Learned</h2>
+                <ul>
+                    <li><strong style="color:#fff">Never use root or admin credentials in CI/CD</strong> — the blast radius is your entire AWS account</li>
+                    <li><strong style="color:#fff">Scope policies to specific resource ARNs</strong> — <code style="color:#00d4aa">Resource: "*"</code> is almost always wrong</li>
+                    <li><strong style="color:#fff">Programmatic-only access for deploy users</strong> — no Console login needed, ever</li>
+                    <li><strong style="color:#fff">GitHub Secrets over environment variables</strong> — secrets are masked in logs automatically</li>
+                    <li><strong style="color:#fff">Rotate keys regularly</strong> — even unexposed keys should be rotated every 90 days as a habit</li>
+                    <li><strong style="color:#fff">Use CloudTrail to audit key usage</strong> — always know what your credentials are doing</li>
+                </ul>
+
+                <h2>Further Reading</h2>
+                <ul>
+                    <li><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html" target="_blank" rel="noopener">AWS IAM Security Best Practices ↗</a></li>
+                    <li><a href="stack.html">How this portfolio's CI/CD pipeline is built ↗</a></li>
+                    <li><a href="blog-cicd-pipeline.html">Building a CI/CD Pipeline for a Static Site ↗</a></li>
+                </ul>
+
+            </div>
+
+            <div class="post-footer">
+                <div class="post-tags">
+                    <span class="tech-tag">AWS IAM</span>
+                    <span class="tech-tag">Security</span>
+                    <span class="tech-tag">CI/CD</span>
+                    <span class="tech-tag">CloudFront</span>
+                    <span class="tech-tag">S3</span>
+                    <span class="tech-tag">DevOps</span>
+                </div>
+                <a href="blog.html" class="btn-outline" style="white-space:nowrap">← All Posts</a>
+            </div>
+        </div>
+
+        <footer>
+            &copy; 2026 Stefon La Touche. All rights reserved.
+        </footer>
+
+        <script src="script.js"></script>
+    </body>
+</html>
