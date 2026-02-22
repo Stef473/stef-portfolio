@@ -683,3 +683,112 @@ nav a.active {
     text-transform: uppercase;
     align-self: flex-start;
 }
+
+/* ── Hamburger button (hidden on desktop) ── */
+.hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.4rem;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: #00d4aa;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* ── Responsive: Tablet (≤768px) ── */
+@media (max-width: 768px) {
+
+    nav {
+        position: relative;
+        padding: 1rem 1.5rem;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #111;
+        flex-direction: column;
+        gap: 0;
+        border-bottom: 1px solid #00d4aa22;
+        z-index: 99;
+    }
+
+    .nav-links.open {
+        display: flex;
+    }
+
+    .nav-links li a {
+        display: block;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #1a1a1a;
+        color: #00d4aa;
+    }
+
+    #hero h1        { font-size: 2.1rem; }
+    .page-hero h1   { font-size: 1.9rem; }
+    h2              { font-size: 1.6rem; }
+
+    section         { padding: 3rem 1.5rem; }
+
+    .project-grid   { grid-template-columns: 1fr; }
+    .blog-grid      { grid-template-columns: 1fr; }
+    .skills-grid    { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+
+    .stack-row {
+        flex-direction: column;
+        gap: 0.15rem;
+    }
+
+    .stack-row-label {
+        min-width: unset;
+    }
+
+    .stack-card {
+        padding: 1.2rem;
+    }
+
+    .card-top {
+        flex-wrap: wrap;
+    }
+}
+
+/* ── Responsive: Mobile (≤480px) ── */
+@media (max-width: 480px) {
+
+    #hero           { padding: 5rem 1.25rem; }
+    #hero h1        { font-size: 1.75rem; }
+    #hero p         { font-size: 0.95rem; }
+
+    .page-hero      { padding: 2.5rem 1.25rem 2rem; }
+    .page-hero h1   { font-size: 1.6rem; }
+
+    section         { padding: 2.5rem 1rem; }
+
+    .post-title     { font-size: 1.5rem !important; }
+
+    .terminal-body  { font-size: 0.8rem; }
+
+    .arch-block     { font-size: 0.75rem; }
+
+    .stack-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}
