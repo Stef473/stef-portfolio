@@ -188,9 +188,27 @@
 
         <section id="contact">
             <h2>Get In Touch With Me</h2>
-            <p>Email: stefonlatouche@gmail.com</p>
-            <p>LinkedIn: <a href="https://linkedin.com/in/stefonlatouche" target="_blank">linkedin.com/in/stefonlatouche</a></p>
-            <p>GitHub: <a href="https://github.com/stefonlatouche" target="_blank">github.com/stefonlatouche</a></p>
+            <p class="contact-sub">Have a question or want to connect? Drop me a message and I'll get back to you.</p>
+            <form class="contact-form" action="https://formspree.io/f/mbdazpgy" method="POST">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" class="form-input" placeholder="Your name" required />
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-input" placeholder="your@email.com" required />
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" class="form-textarea" placeholder="What's on your mind?" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn form-submit">Send Message</button>
+            </form>
+            <div class="contact-links">
+                <a href="mailto:stefonlatouche@gmail.com">stefonlatouche@gmail.com</a>
+                <a href="https://linkedin.com/in/stefonlatouche" target="_blank">LinkedIn</a>
+                <a href="https://github.com/stefonlatouche" target="_blank">GitHub</a>
+            </div>
         </section>
 
         <footer>
