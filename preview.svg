@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0a"/>
+      <stop offset="100%" style="stop-color:#1a1a2e"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00d4aa"/>
+      <stop offset="100%" style="stop-color:#0047d4"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Subtle grid pattern -->
+  <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+    <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#00d4aa" stroke-width="0.3" opacity="0.12"/>
+  </pattern>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+
+  <!-- Top accent bar -->
+  <rect x="0" y="0" width="1200" height="5" fill="url(#bar)"/>
+
+  <!-- Border frame -->
+  <rect x="40" y="40" width="1120" height="550" rx="16" fill="none" stroke="#00d4aa" stroke-width="1" opacity="0.25"/>
+
+  <!-- Left teal glow accent -->
+  <rect x="80" y="160" width="4" height="240" rx="2" fill="url(#bar)" opacity="0.9"/>
+
+  <!-- Name -->
+  <text x="116" y="230" font-family="'Segoe UI', Arial, sans-serif" font-size="72" font-weight="700" fill="#ffffff" letter-spacing="-1">Stefon La Touche</text>
+
+  <!-- Teal divider line -->
+  <rect x="116" y="260" width="520" height="2" rx="1" fill="url(#bar)" opacity="0.7"/>
+
+  <!-- Title / Role -->
+  <text x="116" y="320" font-family="'Segoe UI', Arial, sans-serif" font-size="32" fill="#00d4aa" letter-spacing="1">Cloud Engineer  ·  Data Analyst  ·  Security</text>
+
+  <!-- Description -->
+  <text x="116" y="390" font-family="'Segoe UI', Arial, sans-serif" font-size="26" fill="#aaaaaa">Building cloud infrastructure, data pipelines,</text>
+  <text x="116" y="428" font-family="'Segoe UI', Arial, sans-serif" font-size="26" fill="#aaaaaa">and security tooling on AWS.</text>
+
+  <!-- URL badge -->
+  <rect x="116" y="490" width="340" height="52" rx="10" fill="#00d4aa" opacity="0.12" stroke="#00d4aa" stroke-width="1" opacity="0.4"/>
+  <text x="286" y="522" font-family="'Segoe UI', Arial, sans-serif" font-size="22" fill="#00d4aa" text-anchor="middle" letter-spacing="0.5">stefonlatouche.com</text>
+
+  <!-- Tech tags top-right -->
+  <rect x="820" y="160" width="130" height="40" rx="8" fill="#00d4aa" opacity="0.15" stroke="#00d4aa" stroke-width="1" opacity="0.35"/>
+  <text x="885" y="185" font-family="'Segoe UI', Arial, sans-serif" font-size="18" fill="#00d4aa" text-anchor="middle">AWS</text>
+
+  <rect x="965" y="160" width="175" height="40" rx="8" fill="#00d4aa" opacity="0.15" stroke="#00d4aa" stroke-width="1" opacity="0.35"/>
+  <text x="1052" y="185" font-family="'Segoe UI', Arial, sans-serif" font-size="18" fill="#00d4aa" text-anchor="middle">GitHub Actions</text>
+
+  <rect x="820" y="216" width="130" height="40" rx="8" fill="#00d4aa" opacity="0.15" stroke="#00d4aa" stroke-width="1" opacity="0.35"/>
+  <text x="885" y="241" font-family="'Segoe UI', Arial, sans-serif" font-size="18" fill="#00d4aa" text-anchor="middle">Python</text>
+
+  <rect x="965" y="216" width="175" height="40" rx="8" fill="#00d4aa" opacity="0.15" stroke="#00d4aa" stroke-width="1" opacity="0.35"/>
+  <text x="1052" y="241" font-family="'Segoe UI', Arial, sans-serif" font-size="18" fill="#00d4aa" text-anchor="middle">Security</text>
+
+  <rect x="820" y="272" width="130" height="40" rx="8" fill="#00d4aa" opacity="0.15" stroke="#00d4aa" stroke-width="1" opacity="0.35"/>
+  <text x="885" y="297" font-family="'Segoe UI', Arial, sans-serif" font-size="18" fill="#00d4aa" text-anchor="middle">SQL</text>
+
+  <rect x="965" y="272" width="175" height="40" rx="8" fill="#00d4aa" opacity="0.15" stroke="#00d4aa" stroke-width="1" opacity="0.35"/>
+  <text x="1052" y="297" font-family="'Segoe UI', Arial, sans-serif" font-size="18" fill="#00d4aa" text-anchor="middle">CloudFront</text>
+</svg>
