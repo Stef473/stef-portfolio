@@ -123,7 +123,7 @@
                 </div>
 
                 <!-- GTM + GA4 Analytics -->
-                <div class="project-card-full" data-category="cloud data">
+                <div class="project-card-full" data-category="data">
                     <div class="card-top">
                         <div class="card-title">
                             <span class="card-icon">📊</span>
@@ -251,10 +251,23 @@
                 btn.addEventListener('click', () => applyFilter(btn.dataset.filter));
             });
 
-            // Apply filter from URL query param (e.g. ?filter=cloud)
+            // Apply filter from URL query param (e.g. ?filter=cloud or ?skill=python)
             const params = new URLSearchParams(window.location.search);
             const preFilter = params.get('filter');
-            if (preFilter) applyFilter(preFilter);
+            const preSkill  = params.get('skill');
+
+            if (preFilter) {
+                applyFilter(preFilter);
+            } else if (preSkill) {
+                // Skill-based: match against tech-tag text (case-insensitive substring)
+                filterBtns.forEach(b => b.classList.remove('active'));
+                document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
+                const needle = preSkill.toLowerCase();
+                cards.forEach(card => {
+                    const tags = Array.from(card.querySelectorAll('.tech-tag')).map(t => t.textContent.toLowerCase());
+                    card.style.display = tags.some(t => t.includes(needle)) ? '' : 'none';
+                });
+            }
         </script>
     </body>
 </html>
