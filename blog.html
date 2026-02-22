@@ -84,7 +84,7 @@
 
             <div class="blog-grid">
 
-                <div class="blog-card" data-category="cloud career">
+                <div class="blog-card" data-category="cloud career" data-date="2026-02-18">
                     <div class="blog-meta">
                         <span class="category-tag cat-cloud">Cloud</span>
                         <span class="category-tag cat-career">Career</span>
@@ -98,7 +98,7 @@
                     <span class="coming-soon-badge">Coming Soon</span>
                 </div>
 
-                <a href="blog/cicd-pipeline.html" class="blog-card" data-category="cloud devops" style="text-decoration:none;display:block;">
+                <a href="blog/cicd-pipeline.html" class="blog-card" data-category="cloud devops" data-date="2026-02-20" style="text-decoration:none;display:block;">
                     <div class="blog-meta">
                         <span class="category-tag cat-cloud">Cloud</span>
                         <span class="category-tag cat-devops">DevOps</span>
@@ -112,7 +112,7 @@
                     <span class="btn-outline" style="display:inline-block;margin-top:0.5rem;font-size:0.85rem;">Read Post ↗</span>
                 </a>
 
-                <div class="blog-card" data-category="security">
+                <div class="blog-card" data-category="security" data-date="2026-01-15">
                     <div class="blog-meta">
                         <span class="category-tag cat-security">Security</span>
                         <span class="blog-date">2026</span>
@@ -125,7 +125,7 @@
                     <span class="coming-soon-badge">Coming Soon</span>
                 </div>
 
-                <div class="blog-card" data-category="career">
+                <div class="blog-card" data-category="career" data-date="2026-01-10">
                     <div class="blog-meta">
                         <span class="category-tag cat-career">Career</span>
                         <span class="blog-date">2026</span>
@@ -138,7 +138,7 @@
                     <span class="coming-soon-badge">Coming Soon</span>
                 </div>
 
-                <div class="blog-card" data-category="data">
+                <div class="blog-card" data-category="data" data-date="2026-01-05">
                     <div class="blog-meta">
                         <span class="category-tag cat-data">Data</span>
                         <span class="blog-date">2026</span>
@@ -151,7 +151,7 @@
                     <span class="coming-soon-badge">Coming Soon</span>
                 </div>
 
-                <a href="blog/iam-least-privilege.html" class="blog-card" data-category="security cloud" style="text-decoration:none;display:block;">
+                <a href="blog/iam-least-privilege.html" class="blog-card" data-category="security cloud" data-date="2026-02-22" style="text-decoration:none;display:block;">
                     <div class="blog-meta">
                         <span class="category-tag cat-security">Security</span>
                         <span class="category-tag cat-cloud">Cloud</span>
@@ -174,6 +174,12 @@
 
         <script src="script.js"></script>
         <script>
+            // Sort by date descending (most recent first)
+            const grid = document.querySelector('.blog-grid');
+            Array.from(grid.querySelectorAll('.blog-card'))
+                .sort((a, b) => (b.dataset.date || '').localeCompare(a.dataset.date || ''))
+                .forEach(card => grid.appendChild(card));
+
             // Filter functionality
             const filterBtns = document.querySelectorAll('.filter-btn');
             const cards = document.querySelectorAll('.blog-card');
