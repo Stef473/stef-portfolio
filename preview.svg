@@ -35,7 +35,7 @@
   <rect x="116" y="260" width="520" height="2" rx="1" fill="url(#bar)" opacity="0.7"/>
 
   <!-- Title / Role -->
-  <text x="116" y="320" font-family="'Segoe UI', Arial, sans-serif" font-size="32" fill="#00d4aa" letter-spacing="1">Cloud Security Engineer  ·  Data Analyst</text>
+  <text x="116" y="320" font-family="'Segoe UI', Arial, sans-serif" font-size="32" fill="#00d4aa" letter-spacing="1">Future Cloud Security Engineer  ·  Data Analyst</text>
 
   <!-- Description -->
   <text x="116" y="390" font-family="'Segoe UI', Arial, sans-serif" font-size="26" fill="#aaaaaa">Building cloud infrastructure, data pipelines,</text>
