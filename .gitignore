@@ -1,0 +1,10 @@
+# Secrets & environment variables
+.env
+.env.*
+*.zshrc
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
